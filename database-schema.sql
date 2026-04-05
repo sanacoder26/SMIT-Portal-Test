@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS public.users (
 
 -- Insert a default admin
 INSERT INTO public.users (username, password, role) 
-VALUES ('admin', 'admin123', 'admin')
-ON CONFLICT DO NOTHING;
+VALUES ('admin@gmail.com', 'admin', 'admin')
+ON CONFLICT (username) DO UPDATE SET password = 'admin';
 
 -- Create courses table
 CREATE TABLE IF NOT EXISTS public.courses (

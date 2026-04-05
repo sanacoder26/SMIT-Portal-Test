@@ -123,7 +123,7 @@ export default function Login() {
               </>
             ) : (
               <>
-                <Input label="Admin Username" placeholder="Username" {...register('username', { required: 'Username is required' })} error={errors.username?.message} />
+                <Input label="Admin Email" placeholder="admin@gmail.com" {...register('username', { required: 'Email is required' })} error={errors.username?.message} />
                 <Input label="Password" type="password" placeholder="••••••••" {...register('password', { required: 'Password is required' })} error={errors.password?.message} />
               </>
             )}

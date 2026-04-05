@@ -29,14 +29,18 @@ export default function Sidebar({ role }) {
               className={({ isActive }) =>
                 `flex items-center px-4 py-3 rounded-xl transition duration-150 group ${
                   isActive
-                    ? 'bg-brand-50 text-brand-600 font-medium shadow-sm'
+                    ? 'bg-brand-50 text-brand-600 font-bold shadow-sm shadow-brand-50/50'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`
               }
               end={link.path === '/admin'}
             >
-              <Icon className={({ isActive }) => `mr-3 h-5 w-5 ${isActive ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500'}`} />
-              {link.name}
+              {({ isActive }) => (
+                <>
+                  <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-500'}`} />
+                  <span className="font-medium tracking-tight">{link.name}</span>
+                </>
+              )}
             </NavLink>
           );
         })}

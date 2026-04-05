@@ -16,18 +16,14 @@ export const loginUser = createAsyncThunk(
           
         if (studentErr || !student) throw new Error('Student record not found. Please contact admin.');
         
-        // Match against users table (assuming student signup creates a user record with username = cnic)
-        // Note: The user schema doesn't have password, but user mentioned it in requirements.
-        // Assuming we use a common 'admins' table for admin passwords and just track student presence for now,
-        // or a custom field. Let's stick to the user's provided 'admins' table for admin.
-        return { user: { username: cnic }, role: 'student', studentData: student };
       } else {
-        // Admin login using 'admins' table
+        // Correctly point to the 'users' table as defined in database-schema.sql
         const { data: admin, error } = await supabase
-          .from('admins')
+          .from('users')
           .select('*')
           .eq('username', username)
           .eq('password', password)
+          .eq('role', 'admin') // Only allow users with the 'admin' role
           .single();
           
         if (error || !admin) throw new Error('Invalid admin credentials');
