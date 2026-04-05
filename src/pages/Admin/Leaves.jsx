@@ -28,20 +28,20 @@ export default function AdminLeaves() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Review Leave Requests</h1>
-        <p className="text-gray-500 mt-1">Approve or reject student leave applications.</p>
+      <div className="mb-10 lg:mb-12">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">Review Leave Requests</h1>
+        <p className="text-gray-500 mt-2 text-sm md:text-base lg:text-lg">Approve or reject student leave applications.</p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-left text-sm text-gray-600">
-          <thead className="bg-gray-50 text-gray-700">
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table className="w-full text-left text-sm md:text-base text-gray-600 border-collapse min-w-[700px]">
+          <thead className="bg-gray-50/50 text-gray-700">
             <tr>
-              <th className="px-6 py-4 font-semibold">Student Context</th>
-              <th className="px-6 py-4 font-semibold">Reason</th>
-              <th className="px-6 py-4 font-semibold">Dates</th>
-              <th className="px-6 py-4 font-semibold">Status</th>
-              <th className="px-6 py-4 font-semibold">Actions</th>
+              <th className="px-6 py-5 md:px-8 font-semibold">Student Context</th>
+              <th className="px-6 py-5 md:px-8 font-semibold">Reason</th>
+              <th className="px-6 py-5 md:px-8 font-semibold">Dates</th>
+              <th className="px-6 py-5 md:px-8 font-semibold">Status</th>
+              <th className="px-6 py-5 md:px-8 font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">

@@ -18,7 +18,7 @@ export default function Sidebar({ role }) {
   const links = role === 'admin' ? adminLinks : studentLinks;
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-full flex flex-col pt-6 px-4">
+    <div className="w-full bg-white border-r border-gray-200 h-full flex flex-col pt-6 px-4">
       <div className="space-y-1">
         {links.map((link) => {
           const Icon = link.icon;

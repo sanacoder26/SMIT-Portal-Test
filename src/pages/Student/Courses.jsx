@@ -46,15 +46,15 @@ export default function StudentCourses() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Available Courses</h1>
-        <p className="text-gray-500 mt-1">Explore and enroll in the latest SMIT offerings.</p>
+      <div className="mb-10 lg:mb-12">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">Available Courses</h1>
+        <p className="text-gray-500 mt-2 text-sm md:text-base lg:text-lg">Explore and enroll in the latest SMIT offerings.</p>
       </div>
 
       {loading ? (
         <div className="p-8 text-center text-gray-500">Loading courses...</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8">
           {courses.map(course => (
             <div key={course.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow flex flex-col">
               <div className="flex justify-between items-start mb-4">

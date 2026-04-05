@@ -86,34 +86,36 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-          <div className="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-200">
-            <BookOpen className="w-7 h-7" />
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-6 md:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
+        <div className="w-full max-w-[22rem] sm:max-w-md md:max-w-lg">
+          <div className="flex justify-center flex-col items-center">
+            <div className="w-12 h-12 md:w-14 md:h-14 bg-brand-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl shadow-brand-100 mb-4 md:mb-6">
+              <BookOpen className="w-6 h-6 md:w-8 md:h-8" />
+            </div>
+            <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight px-2">
+              {isSignup ? 'Student Registration' : 'Sign in to SMIT Portal'}
+            </h2>
+            <p className="mt-2 md:mt-3 text-center text-gray-500 text-sm md:text-base lg:text-lg px-4">
+              {isSignup ? 'Join the community and start your journey' : 'Welcome back! Please enter your details'}
+            </p>
           </div>
-        </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          {isSignup ? 'Student Registration' : 'Sign in to SMIT Portal'}
-        </h2>
-      </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
+ 
+          <div className="mt-8 md:mt-10 bg-white py-8 md:py-10 px-4 sm:px-6 md:px-8 shadow-2xl shadow-gray-200/50 rounded-2xl md:rounded-3xl border border-gray-100">
           {!isSignup && (
             <div className="flex bg-gray-100 p-1 rounded-xl mb-6">
               <button 
-                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${role === 'student' ? 'bg-white shadow-sm text-brand-700' : 'text-gray-500 hover:text-gray-700'}`}
+                className={`flex-1 py-1.5 md:py-2 text-xs md:text-sm font-medium rounded-lg transition-all ${role === 'student' ? 'bg-white shadow-sm text-brand-700 font-bold' : 'text-gray-500 hover:text-gray-700'}`}
                 onClick={() => setRole('student')}
               >Student</button>
               <button 
-                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${role === 'admin' ? 'bg-white shadow-sm text-brand-700' : 'text-gray-500 hover:text-gray-700'}`}
+                className={`flex-1 py-1.5 md:py-2 text-xs md:text-sm font-medium rounded-lg transition-all ${role === 'admin' ? 'bg-white shadow-sm text-brand-700 font-bold' : 'text-gray-500 hover:text-gray-700'}`}
                 onClick={() => setRole('admin')}
               >Admin</button>
             </div>
           )}
-
-          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+ 
+          <form className="space-y-4 md:space-y-5" onSubmit={handleSubmit(onSubmit)}>
             {role === 'student' ? (
               <>
                 <Input label="CNIC Number" placeholder="42xxx-xxxxxxx-x" {...register('cnic', { required: 'CNIC is required' })} error={errors.cnic?.message} />
@@ -125,20 +127,21 @@ export default function Login() {
                 <Input label="Password" type="password" placeholder="••••••••" {...register('password', { required: 'Password is required' })} error={errors.password?.message} />
               </>
             )}
-
+ 
             {authError && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl">{authError}</div>}
-
-            <Button type="submit" className="w-full" disabled={loading}>
+ 
+            <Button type="submit" className="w-full h-12 text-base" disabled={loading}>
               {loading ? 'Processing...' : isSignup ? 'Register' : 'Sign in'}
             </Button>
           </form>
-
+ 
           {role === 'student' && (
             <div className="mt-6 text-center text-sm text-gray-600">
               {isSignup ? 'Already registered?' : "New student?"}
-              <button onClick={() => setIsSignup(!isSignup)} className="ml-1 text-brand-600 font-medium">{isSignup ? 'Sign in' : 'Register now'}</button>
+              <button onClick={() => setIsSignup(!isSignup)} className="ml-1 text-brand-600 font-medium hover:underline">{isSignup ? 'Sign in' : 'Register now'}</button>
             </div>
           )}
+          </div>
         </div>
       </div>
     </div>

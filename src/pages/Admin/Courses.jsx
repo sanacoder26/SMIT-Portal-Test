@@ -41,24 +41,24 @@ export default function AdminCourses() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 lg:mb-12">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Manage Courses</h1>
-          <p className="text-gray-500 mt-1">Create and update course statuses.</p>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">Manage Courses</h1>
+          <p className="text-gray-500 mt-2 text-sm md:text-base lg:text-lg">Create and update course statuses.</p>
         </div>
-        <Button onClick={() => handleOpenModal()}>
-          <Plus className="h-4 w-4 mr-2" />
+        <Button onClick={() => handleOpenModal()} className="w-full sm:w-auto shadow-lg shadow-brand-100">
+          <Plus className="h-5 w-5 mr-2" />
           Add Course
         </Button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-left text-sm text-gray-600">
-          <thead className="bg-gray-50 text-gray-700">
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table className="w-full text-left text-sm md:text-base text-gray-600 border-collapse min-w-[600px]">
+          <thead className="bg-gray-50/50 text-gray-700">
             <tr>
-              <th className="px-6 py-4 font-semibold">Course Name</th>
-              <th className="px-6 py-4 font-semibold">Status</th>
-              <th className="px-6 py-4 font-semibold text-right">Actions</th>
+              <th className="px-6 py-5 md:px-8 font-semibold">Course Name</th>
+              <th className="px-6 py-5 md:px-8 font-semibold">Status</th>
+              <th className="px-6 py-5 md:px-8 font-semibold text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
