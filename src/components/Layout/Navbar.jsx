@@ -23,44 +23,54 @@ export default function Navbar() {
         <div className="flex justify-between h-16 md:h-20 items-center">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center group">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-brand-600 rounded-lg flex items-center justify-center mr-2 md:mr-3 group-hover:bg-brand-700 transition shadow-sm shadow-brand-200">
-                <span className="text-white font-bold text-lg md:text-xl">S</span>
+              <div className="p-1 bg-white rounded-xl shadow-sm border border-gray-100 mr-2 md:mr-3 group-hover:shadow-md transition-all duration-300">
+                <div className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-lg p-1 shadow-sm border border-gray-100 flex items-center justify-center hover:rotate-3 transition-all duration-500">
+                  <img 
+                    src="/SMIT.jpeg" 
+                    alt="SMIT Logo" 
+                    className="w-full h-full object-contain rounded-lg" 
+                  />
+                </div>
               </div>
-              <span className="text-lg md:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-green-500">
-                SMIT Portal
-              </span>
+
             </Link>
           </div>
           
           {/* Desktop Nav */}
+          <div className="hidden md:flex flex-1 items-center justify-center">
+            <div className="flex items-center space-x-6 lg:space-x-10">
+              <Link to="/" className="text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 active:scale-95 transition-all">Home</Link>
+              <Link to="/courses" className="px-5 py-2 bg-brand-50 text-brand-700 rounded-full text-sm lg:text-base font-bold hover:bg-brand-100 active:scale-95 transition-all shadow-sm">Courses</Link>
+              <Link to="/login?role=student" className="text-sm lg:text-base font-bold text-gray-500 hover:text-brand-600 active:scale-95 transition-all">Student Login</Link>
+              <Link to="/login?role=student&signup=true" className="text-sm lg:text-base font-bold text-gray-500 hover:text-brand-600 active:scale-95 transition-all">Signup</Link>
+              <Link to={isAuthenticated && role === 'admin' ? "/admin" : "/login?role=admin"} className="text-sm lg:text-base font-bold text-gray-500 hover:text-brand-600 active:scale-95 transition-all">Admin</Link>
+            </div>
+          </div>
+
           <div className="hidden md:flex items-center space-x-4">
             {isAuthenticated ? (
-              <>
-                <Link to={role === 'admin' ? '/admin' : '/student'}>
-                  <Button variant="ghost" size="sm">
-                    <User className="h-4 w-4 mr-2" />
-                    Dashboard
-                  </Button>
-                </Link>
-                <div className="flex items-center space-x-3">
-                  <div className="h-8 w-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 italic font-semibold border border-brand-200">
-                    {user?.username?.charAt(0).toUpperCase() || 'U'}
-                  </div>
-                  <Button variant="outline" size="sm" onClick={handleLogout} className="border-red-200 hover:bg-red-50 hover:text-red-600">
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Logout
-                  </Button>
+              <div className="flex items-center space-x-4">
+                <div className="flex flex-col items-end mr-2">
+                  <span className="text-xs font-bold text-gray-900 leading-none">{user?.username}</span>
+                  <span className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">{role}</span>
                 </div>
-              </>
-            ) : (
-              <div className="space-x-3">
-                <Link to="/login?role=student">
-                  <Button variant="outline" size="sm" className="border-brand-200 text-brand-700 hover:bg-brand-50">Student Portal</Button>
-                </Link>
-                <Link to="/login?role=admin">
-                  <Button size="sm" className="bg-brand-600 hover:bg-brand-700">Admin Login</Button>
-                </Link>
+                <Button variant="outline" size="sm" onClick={handleLogout} className="border-red-200 text-red-600 hover:bg-red-50 rounded-xl h-10 px-5">
+                  Logout
+                </Button>
               </div>
+            ) : (
+              <>
+                <Link to="/login?role=student">
+                  <Button variant="secondary" className="bg-gray-100/80 hover:bg-gray-200 text-gray-900 font-bold rounded-2xl px-6 h-12">
+                    Student Login
+                  </Button>
+                </Link>
+                <Link to={isAuthenticated && role === 'admin' ? "/admin" : "/login?role=admin"}>
+                  <Button className="bg-gradient-to-r from-teal-500 to-brand-600 hover:shadow-lg hover:shadow-brand-200 text-white font-bold rounded-2xl px-6 h-12 transition-all">
+                    Admin Panel
+                  </Button>
+                </Link>
+              </>
             )}
           </div>
 
@@ -105,19 +115,29 @@ export default function Navbar() {
             ) : (
               <div className="flex flex-col space-y-3">
                 <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start">
+                  <Button variant="ghost" className="w-full justify-start text-gray-700">
                     <HomeIcon className="h-5 w-5 mr-3" />
                     Home
                   </Button>
                 </Link>
-                <Link to="/login?role=student" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" className="w-full justify-start border-brand-200 text-brand-700">
-                    Student Portal
+                <Link to="/courses" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start border-brand-100 bg-brand-50 text-brand-700 font-bold">
+                    Explore Courses
                   </Button>
                 </Link>
-                <Link to="/login?role=admin" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="w-full justify-start bg-brand-600">
-                    Admin Login
+                <Link to="/login?role=student" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start border-brand-200 text-brand-700">
+                    Student Login
+                  </Button>
+                </Link>
+                <Link to="/login?role=student&signup=true" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-gray-600">
+                    Create Account (Signup)
+                  </Button>
+                </Link>
+                <Link to={isAuthenticated && role === 'admin' ? "/admin" : "/login?role=admin"} onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full justify-start bg-gradient-to-r from-teal-500 to-brand-600 text-white font-bold border-none shadow-sm">
+                    Admin Panel
                   </Button>
                 </Link>
               </div>

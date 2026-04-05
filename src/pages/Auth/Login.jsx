@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm as useHookForm } from 'react-hook-form';
 import { Button } from '../../components/UI/Button';
 import { Input } from '../../components/UI/Input';
+import { Modal } from '../../components/UI/Modal';
 import { loginUser } from '../../store/slices/authSlice';
 import { supabase } from '../../config/supabase';
 import { BookOpen } from 'lucide-react';
@@ -11,9 +12,44 @@ import { BookOpen } from 'lucide-react';
 export default function Login() {
   const [searchParams] = useSearchParams();
   const defaultRole = searchParams.get('role') === 'admin' ? 'admin' : 'student';
+  const isSignupParam = searchParams.get('signup') === 'true';
   const [role, setRole] = useState(defaultRole);
-  const [isSignup, setIsSignup] = useState(false);
+  const [isSignup, setIsSignup] = useState(isSignupParam);
   const [authError, setAuthError] = useState(null);
+  const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [resetStatus, setResetStatus] = useState(null);
+  const [resetData, setResetData] = useState({ username: '', newPassword: '' });
+  
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setResetStatus({ type: 'loading', msg: 'Processing...' });
+    try {
+      const { data: admin, error: fetchErr } = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', resetData.username)
+        .eq('role', 'admin')
+        .single();
+
+      if (fetchErr || !admin) throw new Error('Admin not found');
+
+      const { error: updateErr } = await supabase
+        .from('users')
+        .update({ password: resetData.newPassword })
+        .eq('id', admin.id);
+
+      if (updateErr) throw updateErr;
+
+      setResetStatus({ type: 'success', msg: 'Password reset successfully!' });
+      setTimeout(() => {
+        setResetModalOpen(false);
+        setResetData({ username: '', newPassword: '' });
+        setResetStatus(null);
+      }, 1500);
+    } catch (err) {
+      setResetStatus({ type: 'error', msg: err.message || 'Failed to reset' });
+    }
+  };
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -90,8 +126,12 @@ export default function Login() {
       <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
         <div className="w-full max-w-[22rem] sm:max-w-md md:max-w-lg">
           <div className="flex justify-center flex-col items-center">
-            <div className="w-12 h-12 md:w-14 md:h-14 bg-brand-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl shadow-brand-100 mb-4 md:mb-6">
-              <BookOpen className="w-6 h-6 md:w-8 md:h-8" />
+            <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-3xl p-3 shadow-xl shadow-brand-100/50 border border-brand-50 mb-6 flex items-center justify-center hover:rotate-3 transition-all duration-500">
+              <img 
+                src="/SMIT.jpeg" 
+                alt="SMIT Logo" 
+                className="w-full h-full object-contain rounded-xl" 
+              />
             </div>
             <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight px-2">
               {isSignup ? 'Student Registration' : 'Sign in to SMIT Portal'}
@@ -125,6 +165,9 @@ export default function Login() {
               <>
                 <Input label="Admin Email" placeholder="admin@gmail.com" {...register('username', { required: 'Email is required' })} error={errors.username?.message} />
                 <Input label="Password" type="password" placeholder="••••••••" {...register('password', { required: 'Password is required' })} error={errors.password?.message} />
+                <div className="flex justify-end">
+                   <button type="button" onClick={() => setResetModalOpen(true)} className="text-xs font-medium text-brand-600 hover:text-brand-500">Forgot Password?</button>
+                </div>
               </>
             )}
  
@@ -144,6 +187,36 @@ export default function Login() {
           </div>
         </div>
       </div>
+      
+      <Modal isOpen={resetModalOpen} onClose={() => setResetModalOpen(false)} title="Reset Admin Password">
+        <form onSubmit={handleResetPassword} className="space-y-4">
+          <p className="text-xs text-gray-500">Please provide your admin email and a new password.</p>
+          <Input 
+            label="Admin Email" 
+            placeholder="admin@gmail.com"
+            required
+            value={resetData.username}
+            onChange={(e) => setResetData({ ...resetData, username: e.target.value })}
+          />
+          <Input 
+            label="New Password" 
+            type="password"
+            placeholder="••••••••"
+            required
+            value={resetData.newPassword}
+            onChange={(e) => setResetData({ ...resetData, newPassword: e.target.value })}
+          />
+          {resetStatus && (
+            <div className={`p-3 rounded-xl text-xs ${resetStatus.type === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+              {resetStatus.msg}
+            </div>
+          )}
+          <div className="pt-4 flex justify-end space-x-3">
+            <Button type="button" variant="ghost" onClick={() => setResetModalOpen(false)}>Cancel</Button>
+            <Button type="submit">Reset Password</Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

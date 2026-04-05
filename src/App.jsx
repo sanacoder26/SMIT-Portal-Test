@@ -13,6 +13,7 @@ import AdminStudents from './pages/Admin/Students';
 import AdminLeaves from './pages/Admin/Leaves';
 import StudentCourses from './pages/Student/Courses';
 import StudentLeaves from './pages/Student/Leaves';
+import PublicCourses from './pages/PublicCourses';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/courses" element={<PublicCourses />} />
               
               {/* Admin Routes */}
               <Route path="/admin" element={<DashboardLayout role="admin" />}>

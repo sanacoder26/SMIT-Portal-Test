@@ -56,7 +56,7 @@ export default function StudentLeaves() {
                   <td className="px-6 py-4">{leave.date_from}</td>
                   <td className="px-6 py-4">{leave.date_to}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${leave.status === 'Approved' ? 'bg-green-100 text-green-700' : leave.status === 'Rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${leave.status === 'approved' ? 'bg-green-100 text-green-700' : leave.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
                       {leave.status}
                     </span>
                   </td>

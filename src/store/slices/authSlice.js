@@ -16,6 +16,7 @@ export const loginUser = createAsyncThunk(
           
         if (studentErr || !student) throw new Error('Student record not found. Please contact admin.');
         
+        return { user: { username: student.cnic }, role: 'student', studentData: student };
       } else {
         // Correctly point to the 'users' table as defined in database-schema.sql
         const { data: admin, error } = await supabase
