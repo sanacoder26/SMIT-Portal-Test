@@ -10,7 +10,7 @@ export const Button = React.forwardRef(({ className, variant = 'primary', size =
   const baseStyles = "inline-flex items-center justify-center rounded-xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 disabled:pointer-events-none disabled:opacity-50 active:scale-95";
   
   const variants = {
-    primary: "bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-200",
+    primary: "bg-gradient-to-r from-teal-500 to-blue-600 text-white hover:from-teal-600 hover:to-blue-700 shadow-md shadow-blue-200/50 hover:shadow-blue-300",
     secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
     outline: "border border-gray-200 bg-transparent hover:bg-gray-50 text-gray-900",
     ghost: "bg-transparent hover:bg-gray-100 text-gray-700",

@@ -7,11 +7,18 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#4B9CD3', /* SMIT cap light blue */
+          500: '#2563eb',
+          600: '#1e3a8a', /* SMIT text dark blue */
+          700: '#172554',
+        },
+        accent: {
+          500: '#8DC63F', /* SMIT green accent */
+          600: '#7ab332',
         }
       }
     },

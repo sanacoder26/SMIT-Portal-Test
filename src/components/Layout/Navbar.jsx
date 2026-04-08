@@ -4,10 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../UI/Button';
 import { logout } from '../../store/slices/authSlice';
 import { LogOut, User, Menu, X, Home as HomeIcon } from 'lucide-react';
+import { Logo } from '../UI/Logo';
 
 export default function Navbar() {
   const { isAuthenticated, role, user } = useSelector(state => state.auth);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileCourseOpen, setIsMobileCourseOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,16 +25,11 @@ export default function Navbar() {
         <div className="flex justify-between h-16 md:h-20 items-center">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center group">
-              <div className="p-1 bg-white rounded-xl shadow-sm border border-gray-100 mr-2 md:mr-3 group-hover:shadow-md transition-all duration-300">
-                <div className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-lg p-1 shadow-sm border border-gray-100 flex items-center justify-center hover:rotate-3 transition-all duration-500">
-                  <img 
-                    src="/SMIT.jpeg" 
-                    alt="SMIT Logo" 
-                    className="w-full h-full object-contain rounded-lg" 
-                  />
-                </div>
+              <div className="transition-transform duration-300 group-hover:scale-105 select-none">
+                <Logo />
               </div>
-
+              <div className="h-8 md:h-10 w-px bg-gray-200 mx-3 md:mx-4 hidden sm:block"></div>
+              <span className="font-extrabold text-lg md:text-xl text-gray-800 tracking-tight hidden sm:block">Connect Portal</span>
             </Link>
           </div>
           
@@ -40,10 +37,33 @@ export default function Navbar() {
           <div className="hidden md:flex flex-1 items-center justify-center">
             <div className="flex items-center space-x-6 lg:space-x-10">
               <Link to="/" className="text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 active:scale-95 transition-all">Home</Link>
-              <Link to="/courses" className="px-5 py-2 bg-brand-50 text-brand-700 rounded-full text-sm lg:text-base font-bold hover:bg-brand-100 active:scale-95 transition-all shadow-sm">Courses</Link>
-              <Link to="/login?role=student" className="text-sm lg:text-base font-bold text-gray-500 hover:text-brand-600 active:scale-95 transition-all">Student Login</Link>
-              <Link to="/login?role=student&signup=true" className="text-sm lg:text-base font-bold text-gray-500 hover:text-brand-600 active:scale-95 transition-all">Signup</Link>
-              <Link to={isAuthenticated && role === 'admin' ? "/admin" : "/login?role=admin"} className="text-sm lg:text-base font-bold text-gray-500 hover:text-brand-600 active:scale-95 transition-all">Admin</Link>
+              <div className="group relative py-4">
+                <Link to="/courses" className="flex items-center text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 active:scale-95 transition-all">
+                  Courses
+                  <svg className="w-4 h-4 ml-1 group-hover:-rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                </Link>
+                {/* Dropdown Box */}
+                <div className="absolute top-full left-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-50 overflow-hidden">
+                  <div className="p-2 space-y-1">
+                    <Link to="/courses?category=web-development" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Web & App Development</Link>
+                    <Link to="/courses?category=graphic-design" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Graphic Design</Link>
+                    <Link to="/courses?category=digital-marketing" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Digital Marketing</Link>
+                    <Link to="/courses?category=python-programming" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Python Programming</Link>
+                  </div>
+                </div>
+              </div>
+              <a 
+                href="/#about" 
+                onClick={(e) => {
+                  if (window.location.pathname === '/') {
+                    e.preventDefault();
+                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 active:scale-95 transition-all"
+              >
+                About
+              </a>
             </div>
           </div>
 
@@ -59,18 +79,16 @@ export default function Navbar() {
                 </Button>
               </div>
             ) : (
-              <>
-                <Link to="/login?role=student">
-                  <Button variant="secondary" className="bg-gray-100/80 hover:bg-gray-200 text-gray-900 font-bold rounded-2xl px-6 h-12">
-                    Student Login
+              <div className="flex items-center space-x-4">
+                <Link to="/login?role=student" className="text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 transition-all mr-2">
+                  Login
+                </Link>
+                <Link to="/login?role=student&signup=true">
+                  <Button className="bg-gradient-to-r from-teal-500 to-blue-600 hover:shadow-lg hover:shadow-blue-200 text-white font-bold rounded-2xl px-6 h-12 transition-all">
+                    Enroll Now
                   </Button>
                 </Link>
-                <Link to={isAuthenticated && role === 'admin' ? "/admin" : "/login?role=admin"}>
-                  <Button className="bg-gradient-to-r from-teal-500 to-brand-600 hover:shadow-lg hover:shadow-brand-200 text-white font-bold rounded-2xl px-6 h-12 transition-all">
-                    Admin Panel
-                  </Button>
-                </Link>
-              </>
+              </div>
             )}
           </div>
 
@@ -120,24 +138,54 @@ export default function Navbar() {
                     Home
                   </Button>
                 </Link>
-                <Link to="/courses" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" className="w-full justify-start border-brand-100 bg-brand-50 text-brand-700 font-bold">
-                    Explore Courses
+                <div>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-between text-gray-700" 
+                    onClick={() => setIsMobileCourseOpen(!isMobileCourseOpen)}
+                  >
+                    <div className="flex items-center">
+                      <Menu className="h-5 w-5 mr-3" />
+                      Courses
+                    </div>
+                    <svg className={`w-4 h-4 transition-transform duration-300 ${isMobileCourseOpen ? '-rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                   </Button>
-                </Link>
+                  
+                  {isMobileCourseOpen && (
+                    <div className="pl-11 pr-4 py-2 space-y-2 border-l-2 border-brand-100 ml-5 mt-1 bg-gray-50/50 rounded-r-lg">
+                      <Link to="/courses?category=web-development" onClick={() => setIsMenuOpen(false)} className="block py-2 text-sm font-semibold text-gray-600 hover:text-brand-600">Web & App Development</Link>
+                      <Link to="/courses?category=graphic-design" onClick={() => setIsMenuOpen(false)} className="block py-2 text-sm font-semibold text-gray-600 hover:text-brand-600">Graphic Design</Link>
+                      <Link to="/courses?category=digital-marketing" onClick={() => setIsMenuOpen(false)} className="block py-2 text-sm font-semibold text-gray-600 hover:text-brand-600">Digital Marketing</Link>
+                      <Link to="/courses?category=python-programming" onClick={() => setIsMenuOpen(false)} className="block py-2 text-sm font-semibold text-gray-600 hover:text-brand-600">Python Programming</Link>
+                    </div>
+                  )}
+                </div>
+                <a 
+                  href="/#about" 
+                  onClick={(e) => {
+                    setIsMenuOpen(false);
+                    if (window.location.pathname === '/') {
+                      e.preventDefault();
+                      setTimeout(() => {
+                        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    }
+                  }}
+                  className="block w-full"
+                >
+                  <Button variant="ghost" className="w-full justify-start text-gray-700 pointer-events-none">
+                    <User className="h-5 w-5 mr-3" />
+                    About
+                  </Button>
+                </a>
                 <Link to="/login?role=student" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="outline" className="w-full justify-start border-brand-200 text-brand-700">
-                    Student Login
+                    Login
                   </Button>
                 </Link>
                 <Link to="/login?role=student&signup=true" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start text-gray-600">
-                    Create Account (Signup)
-                  </Button>
-                </Link>
-                <Link to={isAuthenticated && role === 'admin' ? "/admin" : "/login?role=admin"} onClick={() => setIsMenuOpen(false)}>
-                  <Button className="w-full justify-start bg-gradient-to-r from-teal-500 to-brand-600 text-white font-bold border-none shadow-sm">
-                    Admin Panel
+                  <Button className="w-full justify-start bg-gradient-to-r from-teal-500 to-blue-600 hover:shadow-lg hover:shadow-blue-200 text-white font-bold border-none shadow-sm">
+                    Enroll Now
                   </Button>
                 </Link>
               </div>

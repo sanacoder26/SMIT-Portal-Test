@@ -8,6 +8,7 @@ import { Modal } from '../../components/UI/Modal';
 import { loginUser } from '../../store/slices/authSlice';
 import { supabase } from '../../config/supabase';
 import { BookOpen } from 'lucide-react';
+import { Logo } from '../../components/UI/Logo';
 
 export default function Login() {
   const [searchParams] = useSearchParams();
@@ -126,12 +127,8 @@ export default function Login() {
       <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
         <div className="w-full max-w-[22rem] sm:max-w-md md:max-w-lg">
           <div className="flex justify-center flex-col items-center">
-            <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-3xl p-3 shadow-xl shadow-brand-100/50 border border-brand-50 mb-6 flex items-center justify-center hover:rotate-3 transition-all duration-500">
-              <img 
-                src="/SMIT.jpeg" 
-                alt="SMIT Logo" 
-                className="w-full h-full object-contain rounded-xl" 
-              />
+            <div className="mb-8 md:mb-10 flex justify-center scale-110 md:scale-150 transition-transform duration-500 hover:scale-[1.15] md:hover:scale-[1.55]">
+              <Logo />
             </div>
             <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight px-2">
               {isSignup ? 'Student Registration' : 'Sign in to SMIT Portal'}

@@ -46,7 +46,7 @@ export default function Home() {
         </section>
 
         {/* News Section */}
-        <section className="py-16 md:py-20 lg:py-24">
+        <section id="about" className="py-16 md:py-20 lg:py-24">
           <div className="flex items-center space-x-3 mb-10 lg:mb-12">
             <div className="p-3 bg-blue-100 rounded-xl text-blue-600">
               <Share2 className="h-6 w-6" />

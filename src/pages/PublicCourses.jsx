@@ -78,29 +78,83 @@ export default function PublicCourses() {
       <Modal 
         isOpen={modalOpen} 
         onClose={() => setModalOpen(false)} 
-        title={`Admission Details: ${selectedCourse?.name}`}
-        description="View the application requirements. Please login to submit your official request."
+        title="Admission Application Form"
+        description="Please fill out this complete form to apply."
       >
-        <div className="space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 opacity-70">
-            <Input label="Roll Number" placeholder="Pre-filled on login" readOnly className="bg-gray-50" />
-            <Input label="CNIC" placeholder="Pre-filled on login" readOnly className="bg-gray-50" />
+        <form onSubmit={(e) => { e.preventDefault(); window.alert('successfully'); setModalOpen(false); }} className="space-y-4 max-h-[70vh] overflow-y-auto px-2 pb-4 scrollbar-thin">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-brand-500">Select country</label>
+              <select required className="flex h-11 w-full rounded-md border border-accent-500 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 text-gray-400">
+                <option value="">Select country</option>
+                <option value="pakistan">Pakistan</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-brand-500">Select city</label>
+              <select required className="flex h-11 w-full rounded-md border border-accent-500 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 text-gray-400">
+                <option value="">Select city</option>
+                <option value="karachi">Karachi</option>
+                <option value="lahore">Lahore</option>
+                <option value="islamabad">Islamabad</option>
+              </select>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Full Name" placeholder="Student's Name" disabled />
-            <Input label="Father Name" placeholder="Father's Name" disabled />
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-brand-500">Select course or event</label>
+              <select required className="flex h-11 w-full rounded-md border border-accent-500 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 text-gray-400">
+                <option value="">Select course or event</option>
+                <option value="web">Web & App Development</option>
+                <option value="graphic">Graphic Design</option>
+                <option value="digital">Digital Marketing</option>
+                <option value="python">Python Programming</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-brand-500">Select your computer proficiency</label>
+              <select required className="flex h-11 w-full rounded-md border border-accent-500 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 text-gray-400">
+                <option value="">Select your computer proficiency</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="expert">Expert</option>
+              </select>
+            </div>
           </div>
 
-          <div className="p-4 bg-blue-50 text-blue-700 rounded-2xl text-sm border border-blue-100 font-medium">
-            Note: To apply for this course, you need to be a registered student. Please log in to your portal.
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label={<span className="text-[13px] font-bold text-brand-500">Full name</span>} placeholder="Full name" required className="border-accent-500 focus-visible:ring-accent-500 placeholder-gray-300 rounded-md" />
+            <Input label={<span className="text-[13px] font-bold text-brand-500">Father name</span>} placeholder="Father name" required className="border-accent-500 focus-visible:ring-accent-500 placeholder-gray-300 rounded-md" />
           </div>
 
-          <div className="pt-4 flex flex-col sm:flex-row gap-3">
-            <Button className="flex-1 h-12 rounded-xl" onClick={() => navigate('/login?role=student')}>Login to Apply</Button>
-            <Button variant="ghost" className="flex-1 h-12 rounded-xl" onClick={() => setModalOpen(false)}>Close</Button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label={<span className="text-[13px] font-bold text-brand-500">Email</span>} type="email" placeholder="Email" required className="border-accent-500 focus-visible:ring-accent-500 placeholder-gray-300 rounded-md" />
+            <Input label={<span className="text-[13px] font-bold text-brand-500">Phone</span>} placeholder="Phone" required className="border-accent-500 focus-visible:ring-accent-500 placeholder-gray-300 rounded-md" />
           </div>
-        </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label={<span className="text-[13px] font-bold text-brand-500">CNIC</span>} placeholder="CNIC" required className="border-accent-500 focus-visible:ring-accent-500 placeholder-gray-300 rounded-md" />
+            <Input label={<span className="text-[13px] font-bold text-brand-500">Father's CNIC (optional)</span>} placeholder="Father's CNIC (optional)" className="border-accent-500 focus-visible:ring-accent-500 placeholder-gray-300 rounded-md" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label={<span className="text-[13px] font-bold text-brand-500">Date of birth</span>} type="date" required className="border-accent-500 focus-visible:ring-accent-500 text-gray-500 rounded-md" />
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-bold text-brand-500">Select gender</label>
+              <select required className="flex h-11 w-full rounded-md border border-accent-500 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 text-gray-400">
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="pt-6 flex flex-col sm:flex-row gap-4 mt-2">
+            <Button type="submit" className="flex-1 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-blue-600 shadow-md text-white font-bold text-lg">Submit Form</Button>
+            <Button type="button" variant="ghost" className="flex-1 h-12 rounded-xl border border-gray-300" onClick={() => setModalOpen(false)}>Cancel</Button>
+          </div>
+        </form>
       </Modal>
     </div>
   );
