@@ -5,6 +5,8 @@ import { Button } from '../UI/Button';
 import { logout } from '../../store/slices/authSlice';
 import { LogOut, User, Menu, X, Home as HomeIcon } from 'lucide-react';
 import { Logo } from '../UI/Logo';
+import { supabase } from '../../config/supabase';
+import Swal from 'sweetalert2';
 
 export default function Navbar() {
   const { isAuthenticated, role, user } = useSelector(state => state.auth);
@@ -17,6 +19,83 @@ export default function Navbar() {
     dispatch(logout());
     setIsMenuOpen(false);
     navigate('/');
+  };
+
+  const handleCheckResult = async () => {
+    setIsMenuOpen(false);
+    const { value: cnic } = await Swal.fire({
+      title: 'Check Application Result',
+      input: 'text',
+      inputLabel: 'Enter your CNIC (e.g., 42101-1234567-1)',
+      inputPlaceholder: 'Enter CNIC Number',
+      showCancelButton: true,
+      confirmButtonText: 'Check Status',
+      confirmButtonColor: '#0d9488',
+      inputValidator: (value) => {
+        if (!value) return 'CNIC is required!';
+      }
+    });
+
+    if (cnic) {
+      Swal.fire({
+        title: 'Checking...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      try {
+        const { data: student } = await supabase
+          .from('students')
+          .select('*')
+          .eq('cnic', cnic.trim())
+          .maybeSingle();
+
+        if (student) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Congratulations!',
+            text: 'You have been selected! Please setup your portal account.',
+            confirmButtonText: 'Setup Account',
+            confirmButtonColor: '#0d9488'
+          }).then((res) => {
+             if (res.isConfirmed) navigate('/login?role=student&signup=true');
+          });
+          return;
+        }
+
+        const { data: admission } = await supabase
+          .from('admissions')
+          .select('status')
+          .eq('cnic', cnic.trim())
+          .maybeSingle();
+
+        if (admission) {
+          if (admission.status === 'rejected') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Application Rejected',
+              text: 'We regret to inform you that you were not selected. Try next time!',
+              confirmButtonColor: '#d33',
+              confirmButtonText: 'Try Next Time'
+            });
+          } else {
+            Swal.fire({
+              icon: 'info',
+              title: 'Application Pending',
+              text: 'Your application is still under review. Please check again later.',
+            });
+          }
+        } else {
+           Swal.fire({
+              icon: 'warning',
+              title: 'No Record Found',
+              text: 'We could not find any application with this CNIC.',
+           });
+        }
+      } catch (err) {
+        Swal.fire('Error', 'Failed to check result. Try again.', 'error');
+      }
+    }
   };
 
   return (
@@ -37,21 +116,23 @@ export default function Navbar() {
           <div className="hidden md:flex flex-1 items-center justify-center">
             <div className="flex items-center space-x-6 lg:space-x-10">
               <Link to="/" className="text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 active:scale-95 transition-all">Home</Link>
-              <div className="group relative py-4">
-                <Link to="/courses" className="flex items-center text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 active:scale-95 transition-all">
-                  Courses
-                  <svg className="w-4 h-4 ml-1 group-hover:-rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                </Link>
-                {/* Dropdown Box */}
-                <div className="absolute top-full left-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-50 overflow-hidden">
-                  <div className="p-2 space-y-1">
-                    <Link to="/courses?category=web-development" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Web & App Development</Link>
-                    <Link to="/courses?category=graphic-design" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Graphic Design</Link>
-                    <Link to="/courses?category=digital-marketing" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Digital Marketing</Link>
-                    <Link to="/courses?category=python-programming" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Python Programming</Link>
+              {role !== 'student' && (
+                <div className="group relative py-4">
+                  <Link to="/courses" className="flex items-center text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 active:scale-95 transition-all">
+                    Courses
+                    <svg className="w-4 h-4 ml-1 group-hover:-rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </Link>
+                  {/* Dropdown Box */}
+                  <div className="absolute top-full left-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-50 overflow-hidden">
+                    <div className="p-2 space-y-1">
+                      <Link to="/courses?category=web-development" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Web & App Development</Link>
+                      <Link to="/courses?category=graphic-design" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Graphic Design</Link>
+                      <Link to="/courses?category=digital-marketing" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Digital Marketing</Link>
+                      <Link to="/courses?category=python-programming" className="block px-4 py-2.5 text-sm font-semibold text-gray-600 hover:bg-brand-50 hover:text-brand-700 rounded-lg transition-colors">Python Programming</Link>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
               <a 
                 href="/#about" 
                 onClick={(e) => {
@@ -80,10 +161,13 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center space-x-4">
+                <button onClick={handleCheckResult} className="text-sm border border-brand-200 lg:text-base font-bold text-brand-700 hover:bg-brand-50 px-3 py-1.5 rounded-xl transition-all">
+                  Check Result
+                </button>
                 <Link to="/login?role=student" className="text-sm lg:text-base font-bold text-gray-700 hover:text-brand-600 transition-all mr-2">
                   Login
                 </Link>
-                <Link to="/login?role=student&signup=true">
+                <Link to="/registration">
                   <Button className="bg-gradient-to-r from-teal-500 to-blue-600 hover:shadow-lg hover:shadow-blue-200 text-white font-bold rounded-2xl px-6 h-12 transition-all">
                     Enroll Now
                   </Button>
@@ -178,12 +262,15 @@ export default function Navbar() {
                     About
                   </Button>
                 </a>
+                <Button variant="outline" className="w-full justify-start border-brand-200 text-brand-700" onClick={handleCheckResult}>
+                  Check Result
+                </Button>
                 <Link to="/login?role=student" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="outline" className="w-full justify-start border-brand-200 text-brand-700">
                     Login
                   </Button>
                 </Link>
-                <Link to="/login?role=student&signup=true" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/registration" onClick={() => setIsMenuOpen(false)}>
                   <Button className="w-full justify-start bg-gradient-to-r from-teal-500 to-blue-600 hover:shadow-lg hover:shadow-blue-200 text-white font-bold border-none shadow-sm">
                     Enroll Now
                   </Button>

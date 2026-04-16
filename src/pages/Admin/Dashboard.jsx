@@ -15,11 +15,47 @@ export default function Dashboard() {
     confirmPassword: '' 
   });
 
+  const [counts, setCounts] = useState({
+    students: 0,
+    courses: 0,
+    leaves: 0,
+    admins: 0
+  });
+
+  React.useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const [
+          { count: studentCount },
+          { count: courseCount },
+          { count: leaveCount },
+          { count: adminCount }
+        ] = await Promise.all([
+          supabase.from('students').select('*', { count: 'exact', head: true }),
+          supabase.from('courses').select('*', { count: 'exact', head: true }),
+          supabase.from('leaves').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+          supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'admin')
+        ]);
+
+        setCounts({
+          students: studentCount || 0,
+          courses: courseCount || 0,
+          leaves: leaveCount || 0,
+          admins: adminCount || 0
+        });
+      } catch (error) {
+        console.error('Error fetching counts:', error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
+
   const stats = [
-    { name: 'Total Students', value: '2, 845', icon: Users, color: 'text-blue-600', bg: 'bg-blue-100' },
-    { name: 'Active Courses', value: '14', icon: BookOpen, color: 'text-green-600', bg: 'bg-green-100' },
-    { name: 'Pending Leaves', value: '38', icon: Calendar, color: 'text-orange-600', bg: 'bg-orange-100' },
-    { name: 'Admins', value: '5', icon: ShieldCheck, color: 'text-purple-600', bg: 'bg-purple-100' },
+    { name: 'Total Students', value: counts.students.toLocaleString(), icon: Users, color: 'text-blue-600', bg: 'bg-blue-100' },
+    { name: 'Active Courses', value: counts.courses.toString(), icon: BookOpen, color: 'text-green-600', bg: 'bg-green-100' },
+    { name: 'Pending Leaves', value: counts.leaves.toString(), icon: Calendar, color: 'text-orange-600', bg: 'bg-orange-100' },
+    { name: 'Admins', value: counts.admins.toString(), icon: ShieldCheck, color: 'text-purple-600', bg: 'bg-purple-100' },
   ];
 
   const handleAddAdmin = async (e) => {

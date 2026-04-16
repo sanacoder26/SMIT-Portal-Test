@@ -10,7 +10,7 @@ const adminLinks = [
 ];
 
 const studentLinks = [
-  { name: 'Available Courses', path: '/student/courses', icon: BookOpen },
+  { name: 'Dashboard', path: '/student', icon: LayoutDashboard },
   { name: 'My Leaves', path: '/student/leaves', icon: Calendar },
 ];
 

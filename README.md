@@ -63,7 +63,7 @@ SMIT Connect Portal is a full-stack web application designed to manage student a
 ### Backend & Database
 
 * Supabase (PostgreSQL + Auth + Storage)
-  *(Alternative: Firebase)*
+  
 
 ### File Uploads
 

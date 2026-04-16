@@ -3,20 +3,45 @@ import { supabase } from '../../config/supabase';
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async ({ username, cnic, roll_number, password, isStudent = true }, { rejectWithValue }) => {
+  async ({ username, cnic, phone, password, isStudent = true }, { rejectWithValue }) => {
     try {
       if (isStudent) {
-        // Authenticate student: Check if pre-added in students table
-        const { data: student, error: studentErr } = await supabase
-          .from('students')
+        // Authenticate student: Check users table for credentials
+        const { data: userRecord, error: authErr } = await supabase
+          .from('users')
           .select('*')
-          .eq('cnic', cnic)
-          .eq('roll_number', roll_number)
+          .eq('username', cnic.trim())
+          .eq('password', password)
+          .eq('role', 'student')
           .single();
-          
-        if (studentErr || !student) throw new Error('Student record not found. Please contact admin.');
+
+        if (authErr || !userRecord) throw new Error('Invalid CNIC or Password');
         
-        return { user: { username: student.cnic }, role: 'student', studentData: student };
+        // Fetch their admission data to populate studentData
+        const { data: admission, error: admissionErr } = await supabase
+          .from('admissions')
+          .select('*')
+          .eq('cnic', cnic.trim())
+          .maybeSingle();
+
+        let rollNumber = null;
+        // Fetch roll number from students table (authorized list)
+        const { data: student } = await supabase
+          .from('students')
+          .select('roll_number')
+          .eq('cnic', cnic.trim())
+          .maybeSingle();
+        rollNumber = student?.roll_number;
+
+        return { 
+          user: { 
+            username: userRecord.username, 
+            full_name: admission ? admission.full_name : 'Student',
+            admission_id: admission ? admission.id : null 
+          }, 
+          role: 'student', 
+          studentData: admission ? { ...admission, roll_number: rollNumber } : (rollNumber ? { status: 'accepted', roll_number: rollNumber, cnic: cnic.trim() } : null)
+        };
       } else {
         // Correctly point to the 'users' table as defined in database-schema.sql
         const { data: admin, error } = await supabase

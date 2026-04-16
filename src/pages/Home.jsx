@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/UI/Button';
 import { ArrowRight, Share2 } from 'lucide-react';
+import Footer from '../components/Layout/Footer';
 
 const mockFacebookPosts = [
   { id: 1, text: "Admission for Batch 10 is now open! Apply online to secure your seat in our upcoming IT programs.", date: "2 hrs ago", image: "post1.jpeg" },
@@ -16,28 +17,67 @@ export default function Home() {
   return (
     <div className="flex-1 bg-gray-50 flex flex-col">
       <div className="max-w-7xl mx-auto w-full px-3 py-4 md:p-6 lg:p-8 xl:p-10 flex-1">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 min-h-[50vh] flex items-center">
-          <div className="absolute inset-0 bg-brand-50/50" />
-          <div className="w-full px-4 sm:px-6 lg:px-12 py-12 md:py-24 relative">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight text-gray-900 mb-4 md:mb-6 leading-[1.1]">
-                Empowering Youth Through <br className="hidden sm:block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-green-500">IT Education</span>
+        {/* New Hero Section */}
+        <section className="relative overflow-hidden bg-white min-h-[70vh] flex items-center justify-center py-20">
+          {/* Decorative Elements (Planes and Lines) */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+             {/* Laptop Icon Top Left */}
+             <div className="absolute top-10 left-[10%] opacity-80 md:opacity-100 animate-bounce duration-3000">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M20 16V7a2 2 0 00-2-2H6a2 2 0 00-2 2v9m16 0H4a2 2 0 00-2 2h20a2 2 0 00-2-2z" stroke="#8DC63F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                   <path d="M8 20h8" stroke="#8DC63F" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+             </div>
+             
+             {/* Globe Icon Bottom Right */}
+             <div className="absolute bottom-10 right-[10%] opacity-80 md:opacity-100 animate-pulse">
+                <svg width="130" height="130" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <circle cx="12" cy="12" r="10" stroke="#8DC63F" strokeWidth="1.5"/>
+                   <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke="#8DC63F" strokeWidth="1.5"/>
+                </svg>
+             </div>
+
+             {/* Plane 1 path */}
+             <svg className="absolute top-20 right-[20%] w-32 h-32" viewBox="0 0 100 100">
+                <path d="M10 90 Q 50 10 90 40" stroke="#4B9CD3" strokeDasharray="4 4" fill="none" />
+                <path d="M90 40 l-8 2 l4 -8 z" fill="#4B9CD3" />
+             </svg>
+
+             {/* Plane 2 path */}
+             <svg className="absolute bottom-20 left-[15%] w-48 h-32" viewBox="0 0 150 100">
+                <path d="M140 10 Q 70 90 10 70" stroke="#8DC63F" strokeDasharray="4 4" fill="none" />
+                <path d="M10 70 l8 -2 l-4 8 z" fill="#8DC63F" />
+             </svg>
+          </div>
+
+          <div className="w-full px-4 sm:px-6 lg:px-12 relative z-10">
+            <div className="text-center max-w-5xl mx-auto space-y-8">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-gray-900 leading-[1.05]">
+                Building Pakistan's <br />
+                <span className="text-[#4B9CD3]">Tech Future</span>
               </h1>
-              <p className="mt-4 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-600 mb-8 md:mb-10 leading-relaxed max-w-2xl mx-auto px-4">
-                Saylani Mass IT Training (SMIT) connect portal. Register for courses, track your leaves, and build your future.
+              
+              <p className="mt-6 text-lg md:text-2xl text-gray-500 font-medium max-w-3xl mx-auto">
+                Changing Lives. Building Careers. Shaping the Future.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4 lg:gap-6 px-4">
-                <Link to="/login?role=student" className="w-full sm:w-auto">
-                  <Button size="lg" className="w-full px-8 font-semibold text-base sm:text-lg hover:scale-105 transition-transform active:scale-95 shadow-lg shadow-brand-100">
-                    Student Portal
+
+              <div className="flex justify-center py-4">
+                 <img 
+                    src="/saylani_logo.webp" 
+                    alt="Saylani Logo" 
+                    className="h-16 md:h-20 object-contain"
+                 />
+              </div>
+
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-5 pt-4">
+                <Link to="/registration">
+                  <Button size="lg" className="bg-[#1273b0] hover:bg-[#0e5c8e] text-white px-10 py-7 rounded-full text-xl font-bold transition-all shadow-xl hover:scale-105">
+                    ENROLL NOW
                   </Button>
                 </Link>
-                <Link to="/courses" className="w-full sm:w-auto">
-                  <Button size="lg" variant="outline" className="w-full px-8 font-semibold text-base sm:text-lg bg-white hover:scale-105 transition-transform active:scale-95 border-gray-200">
-                    View Courses
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                <Link to="/courses">
+                  <Button size="lg" variant="outline" className="border-2 border-gray-300 hover:border-brand-500 hover:bg-brand-50 text-gray-700 px-10 py-7 rounded-full text-xl font-bold transition-all hover:scale-105">
+                    EXPLORE COURSES
                   </Button>
                 </Link>
               </div>
@@ -81,6 +121,7 @@ export default function Home() {
           </div>
         </section>
       </div>
+      <Footer />
     </div>
   );
 }

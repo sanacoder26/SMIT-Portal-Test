@@ -60,24 +60,26 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     setAuthError(null);
+    const cleanCnic = data.cnic ? data.cnic.toString().replace(/\D/g, '') : '';
+    
     if (isSignup && role === 'student') {
       try {
         // Step 1: Check if pre-added in students table
         const { data: student, error: studentError } = await supabase
           .from('students')
           .select('*')
-          .eq('cnic', data.cnic)
-          .eq('roll_number', data.roll_number)
+          .eq('cnic', cleanCnic)
           .single();
           
         if (studentError || !student) {
-          setAuthError("You are not pre-registered. Please contact admin.");
+          setAuthError("You are not pre-registered in the authorized list. Please contact admin.");
           return;
         }
 
-        // Step 2: Create a user entry
+        // Step 2: Create a user entry with password
         const { error: signUpError } = await supabase.from('users').insert([{
-          username: data.cnic,
+          username: cleanCnic,
+          password: data.password,
           role: 'student'
         }]);
 
@@ -88,11 +90,11 @@ export default function Login() {
 
         // Login as student
         await dispatch(loginUser({ 
-          cnic: data.cnic, 
-          roll_number: data.roll_number, 
+          cnic: cleanCnic, 
+          password: data.password, 
           isStudent: true 
         })).unwrap();
-        navigate('/student/courses');
+        navigate('/student');
       } catch (err) {
         setAuthError(err.message || 'Signup failed');
       }
@@ -110,11 +112,11 @@ export default function Login() {
         } else {
           // Student login
           await dispatch(loginUser({ 
-            cnic: data.cnic, 
-            roll_number: data.roll_number, 
+            cnic: cleanCnic, 
+            password: data.password, 
             isStudent: true 
           })).unwrap();
-          navigate('/student/courses');
+          navigate('/student'); // Go to /student which will decide based on status
         }
       } catch (err) {
         setAuthError(typeof err === 'string' ? err : 'Invalid credentials');
@@ -131,10 +133,10 @@ export default function Login() {
               <Logo />
             </div>
             <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight px-2">
-              {isSignup ? 'Student Registration' : 'Sign in to SMIT Portal'}
+              {isSignup ? 'Setup Portal Password' : 'Sign in to SMIT Portal'}
             </h2>
             <p className="mt-2 md:mt-3 text-center text-gray-500 text-sm md:text-base lg:text-lg px-4">
-              {isSignup ? 'Join the community and start your journey' : 'Welcome back! Please enter your details'}
+              {isSignup ? 'Create your password to access your dashboard' : 'Welcome back! Please enter your details'}
             </p>
           </div>
  
@@ -155,8 +157,8 @@ export default function Login() {
           <form className="space-y-4 md:space-y-5" onSubmit={handleSubmit(onSubmit)}>
             {role === 'student' ? (
               <>
-                <Input label="CNIC Number" placeholder="42xxx-xxxxxxx-x" {...register('cnic', { required: 'CNIC is required' })} error={errors.cnic?.message} />
-                <Input label="Roll Number" placeholder="WM-12345" {...register('roll_number', { required: 'Roll Number is required' })} error={errors.roll_number?.message} />
+                <Input label="CNIC Number" placeholder="42201-1234567-1" {...register('cnic', { required: 'CNIC is required' })} error={errors.cnic?.message} />
+                <Input label="Password" type="password" placeholder="••••••••" {...register('password', { required: 'Password is required' })} error={errors.password?.message} />
               </>
             ) : (
               <>
@@ -171,14 +173,26 @@ export default function Login() {
             {authError && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl">{authError}</div>}
  
             <Button type="submit" className="w-full h-12 text-base" disabled={loading}>
-              {loading ? 'Processing...' : isSignup ? 'Register' : 'Sign in'}
+              {loading ? 'Processing...' : isSignup ? 'Setup Password' : 'Sign in'}
             </Button>
           </form>
  
-          {role === 'student' && (
+          {role === 'student' && !isSignup && (
+            <div className="mt-6 flex flex-col space-y-3 text-center text-sm text-gray-600">
+              <div>
+                First time portal access?
+                <button type="button" onClick={() => setIsSignup(true)} className="ml-1 text-brand-600 font-medium hover:underline">Setup Password</button>
+              </div>
+              <div className="pt-3 border-t border-gray-100">
+                Want to apply for admission?
+                <button type="button" onClick={() => navigate('/registration')} className="ml-1 text-brand-600 font-bold hover:underline">Register now</button>
+              </div>
+            </div>
+          )}
+          {role === 'student' && isSignup && (
             <div className="mt-6 text-center text-sm text-gray-600">
-              {isSignup ? 'Already registered?' : "New student?"}
-              <button onClick={() => setIsSignup(!isSignup)} className="ml-1 text-brand-600 font-medium hover:underline">{isSignup ? 'Sign in' : 'Register now'}</button>
+              Already setup your password?
+              <button type="button" onClick={() => setIsSignup(false)} className="ml-1 text-brand-600 font-medium hover:underline">Sign in</button>
             </div>
           )}
           </div>

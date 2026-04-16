@@ -11,9 +11,11 @@ import AdminDashboard from './pages/Admin/Dashboard';
 import AdminCourses from './pages/Admin/Courses';
 import AdminStudents from './pages/Admin/Students';
 import AdminLeaves from './pages/Admin/Leaves';
+import StudentDashboard from './pages/Student/Dashboard';
 import StudentCourses from './pages/Student/Courses';
 import StudentLeaves from './pages/Student/Leaves';
 import PublicCourses from './pages/PublicCourses';
+import AdmissionForm from './pages/AdmissionForm';
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/courses" element={<PublicCourses />} />
+              <Route path="/registration" element={<AdmissionForm />} />
               
               {/* Admin Routes */}
               <Route path="/admin" element={<DashboardLayout role="admin" />}>
@@ -37,8 +40,7 @@ function App() {
 
               {/* Student Routes */}
               <Route path="/student" element={<DashboardLayout role="student" />}>
-                <Route index element={<Navigate to="/student/courses" />} />
-                <Route path="courses" element={<StudentCourses />} />
+                <Route index element={<StudentDashboard />} />
                 <Route path="leaves" element={<StudentLeaves />} />
               </Route>
             </Routes>
